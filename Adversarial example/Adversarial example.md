@@ -8,7 +8,7 @@
 
 The first property is concerned with the semantic meaning of individual units… Generally, it seems that it is the entire **space of activations**, rather than the individual units, that contains the bulk of the **semantic information**. 
 
- 第一个特性是关于单个神经元的语义信息。作者发现，**语义信息**并非单独存在于某个神经元中，而是分布在整个**激活空间**。 
+第一个特性是关于单个神经元的语义信息。作者发现，**语义信息**并非单独存在于某个神经元中，而是分布在整个**激活空间**。 
 
 The second property is concerned with the **stability** of neural networks with respect to small perturbations to their inputs. However, we find that applying an imperceptible **non-random perturbation** to a test image, it is possible to **arbitrarily** change the network’s prediction 
 
@@ -44,20 +44,69 @@ Yet, we found that **adversarial examples** are **relatively robust**, and are s
 
 
 
-Reference： https://www.jianshu.com/p/9f58542d982a （重点)
-
-​     				  https://www.cnblogs.com/lucifer1997/p/12771805.html 
-
-​					   https://blog.csdn.net/qq_43205738/article/details/84575387 
-
-L-BFGS:  https://blog.csdn.net/u012285175/article/details/77866878 
-
-hard negative mining:   https://blog.csdn.net/u012285175/article/details/77866878 
+> Reference： https://www.jianshu.com/p/9f58542d982a （重点)
+>
+> ​     				  https://www.cnblogs.com/lucifer1997/p/12771805.html 
+>
+> ​					   https://blog.csdn.net/qq_43205738/article/details/84575387 
+>
+> L-BFGS:  https://blog.csdn.net/u012285175/article/details/77866878 
+>
+> hard negative mining:   https://blog.csdn.net/u012285175/article/details/77866878 
 
 
 
 # Explaining and Harnessing Adversarial Examples (ICLR 2015)
 
-##### **观点：Goodfellow则认为，神经网络在高维空间的线性行为才是导致对抗样本存在的真正原因** 
+Early attempts at explaining this phenomenon (adversarial examples) focused on **nonlinearity and overfitting**. We argue instead that the primary cause of neural networks’ vulnerability to adversarial
+perturbation is their **linear nature**. **Moreover,this view yields a simple and fast method of generating adversarial examples.**
 
- https://blog.csdn.net/u014380165/article/details/90723948 
+##### 观点：早期科学家们尝试解释对抗样本的产生主要聚焦于模型的高度非线性和过拟合，而Goodfellow则认为，神经网络在高维空间的线性行为才是导致对抗样本存在的真正原因。并且通过一堆量化的数据结果证明了它的观点，而且这个观点也得出了一个快速产生对抗样本的方法--Fast Gradient Sign Method （FGSM）
+
+
+
+### **对抗样本的线性解释**：
+
+![[公式]](https://www.zhihu.com/equation?tex=w%5E%7B%5Ctop+%7D%5Cwidetilde%7Bx%7D+%3D+w%5E%7B%5Ctop+%7Dx+%2B+w%5E%7B%5Ctop+%7D%5Ceta+%3D+w%5E%7B%5Ctop+%7Dx+%2B+w%5E%7B%5Ctop+%7Dsign%28w%29+) 
+
+假设权重向量 ![[公式]](https://www.zhihu.com/equation?tex=w) 的每一个元素的平均值为 ![[公式]](https://www.zhihu.com/equation?tex=m) ，则对抗扰动对激活过程的影响为 ![[公式]](https://www.zhihu.com/equation?tex=%5Cvarepsilon+mn) , 因此，对抗扰动 ![[公式]](https://www.zhihu.com/equation?tex=%5Ceta) 对激活过程的影响会随着特征的维数 ![[公式]](https://www.zhihu.com/equation?tex=n) 线性地增长。对于高维问题，如果我们对模型输入每一维做出一点细微的改变，最终对模型输出结果的影响将是巨大的。 
+
+### 非线性模型的线性扰动![img](https://pic3.zhimg.com/80/v2-cdea0e1fe15d390d4e0fd68ff106735e_720w.jpg) 
+
+作者利用对抗样本的线性解释提出了一个快速产生对抗样本的方式，也即Fast Gradient Sign Method(FGSM)方法。假设模型的参数值为![\theta ](https://math.jianshu.com/math?formula=%5Ctheta%20)，模型的输入是 ![x](https://math.jianshu.com/math?formula=x%0A)，![y](https://math.jianshu.com/math?formula=y%0A)是模型对应的标签，![J(\theta ,x,y)](https://math.jianshu.com/math?formula=J(%5Ctheta%20%2Cx%2Cy))是损失函数，对某个特定的模型参数![\theta ](https://math.jianshu.com/math?formula=%5Ctheta%20)而言，**FGSM方法将损失函数近似线性化**，从而获得保证无穷范数限制的最优的扰动(即![\vert \vert \eta \vert \vert _{ \infty} <\epsilon ](https://math.jianshu.com/math?formula=%5Cvert%20%5Cvert%20%5Ceta%20%5Cvert%20%5Cvert%20_%7B%20%5Cinfty%7D%20%3C%5Cepsilon%20))
+
+实验表明，FGSM这种简单的算法确实可以产生误分类的对抗样本，从而证明了作者假设的对抗样本的产生原因是由于模型的线性特性。同时，这种算法也可作为一种加速对抗训练的方法。 
+
+**常规的分类模型训练在更新参数时都是将参数减去计算得到的梯度，这样就能使得损失值越来越小，从而模型预测对的概率越来越大。既然无目标攻击是希望模型将输入图像错分类成正确类别以外的其他任何一个类别都算攻击成功，那么只需要损失值越来越大就可以达到这个目标，也就是模型预测的概率中对应于真实标签的概率越小越好，这和原来的参数更新目的正好相反。因此我只需要在输入图像中加上计算得到的梯度方向，这样修改后的图像经过分类网络时的损失值就比修改前的图像经过分类网络时的损失值要大，换句话说，模型预测对的概率变小了。这就是FGSM算法的内容，一方面是基于输入图像计算梯度，另一方面更新输入图像时是加上梯度，而不是减去梯度，这和常见的分类模型更新参数正好背道而驰。
+前面我们提到之所以采用梯度方向而不是采用梯度值是为了控制扰动的L∞距离，这只是其中的一部分。在Figure1中，梯度方向前一般会有一个权重参数e，这个权重参数可以用来控制攻击噪声的幅值，参数值越大，攻击强度也越大，肉眼也更容易观察到攻击噪声（因为输入图像归一化成0到1，所以图中e值只有0.07，换算成0到255的话差不多18个像素值），因此最终的攻击噪声就如下所示。因为FGSM算法的攻击噪声幅值评价指标是L∞，因此权重参数e和梯度方向就可以控制每个像素的最大变化值。** 
+
+>  https://blog.csdn.net/u014380165/article/details/90723948 
+
+### 对抗训练
+
+Szegedy等人的研究表明，将干净数据和对抗样本混合起来一起训练在一定程度上可以使神经网络被正则化，而且，基于对抗样例的训练方式与其他的数据增强方法有所不同。
+
+Goodfellow发现，基于快速梯度符号法对目标函数进行改进可以起到很好的正则化效果，改进后的损失函数形式为：
+
+![[公式]](https://www.zhihu.com/equation?tex=%5Cwidetilde%7BJ%7D+%28%5Ctheta%2C+x%2C+y%29+%3D+%5Calpha+J%28%5Ctheta%2C+x%2C+y%29+%2B+%281-%5Calpha%29+J%28%5Ctheta%2C+x%2B%5Cepsilon+sign%28%5Cbigtriangledown_%7Bx%7DJ%28%5Ctheta+%2Cx%2Cy%29%29%2C+y+%29)
+
+在试验中，作者设置 ![[公式]](https://www.zhihu.com/equation?tex=%5Calpha+%3D+0.5) （经验值）
+
+### 总结
+
+优点：这篇论文中，Goodfellow否定了Szegedy关于为什么神经网络易受到对抗样例攻击的解释，他认为**神经网络在高维空间中线性性质**才是导致对抗样本存在的真正原因。基于这种解释，Goodfellow提出了一种快速生成对抗样本的方法，即快速梯度符号法，这种方法的核心思想是沿着梯度的反方向添加扰动从而拉大对抗样本于原始样本的距离，因为Goodfellow认为在构造对抗样本时，我们更应该关心的是扰动的方向而不是扰动的数目。Goodfellow认为**对抗样本之所以有泛化性的原因是因为添加的扰动与模型的权重向量高度一致，而且不同的模型在被训练执行相同的任务时，从训练数据中学到的东西相似**。在这篇文章中，Goodfellow提出了对抗训练的思想，他认为对抗训练会导致训练过程中的正则化，而且其效果甚至超过了 ![dropout](https://math.jianshu.com/math?formula=dropout)。
+
+不足：这篇文章中提出的快速梯度符号法存在明显的缺点，首先，这是一种**不定向的攻击**，只能让模型出错而无法做到定向攻击。而且这种攻击的**鲁棒性不强**，**添加的扰动容易在图片的预处理阶段被过滤掉**。尽管Googdfellow提出的对抗训练方式可以提高模型的泛化能力，从而在一定程度上防御对抗样本攻击，但这种防御方法只针对**一步对抗样本攻击**有效，攻击者仍可以针对新的网络构造其他的对抗样本。
+
+>  https://zhuanlan.zhihu.com/p/33875223 
+>
+>  https://zhuanlan.zhihu.com/p/32784766 
+>
+>  https://zhuanlan.zhihu.com/p/94707659 
+>
+>  https://www.jianshu.com/p/f3ee515fa9f4 
+>
+>  https://blog.csdn.net/qq_24974989/article/details/88914086 
+>
+>  https://blog.csdn.net/u014380165/article/details/90723948 
+

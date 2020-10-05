@@ -26,6 +26,14 @@
 
 - `git push -u origin master` 由于远程库是空的，我们第一次推送`master`分支时，加上了`-u`参数，Git不但会把本地的`master`分支内容推送的远程新的`master`分支，还会把本地的`master`分支和远程的`master`分支关联起来 
 
+- `git merge origin/jwang`
+
+- `git add .`
+
+- `git commit -m''`
+
+- `git push origin jwang`
+
 -  `git push <远程主机名> <本地分支名> :<远程分支名>  git push origin master:jwang` 把本地的的`master push` 到远程分支`jwang` 如果远程仓库没有`jwang`分支则会创建
 
 

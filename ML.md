@@ -52,7 +52,7 @@ https://blog.csdn.net/weixin_39445556/article/details/81416133
 
  ![img](https://img-blog.csdn.net/20180806201603858?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQ0NTU1Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70) 
 
-  求得最大时W的值,则总结出了所有事件符合的规律.求解过程如下(这里记住,我们求得的是什么情况下函数的值最大,并不是求得函数的解):
+求得最大时W的值,则总结出了所有事件符合的规律.求解过程如下(这里记住,我们求得的是什么情况下函数的值最大,并不是求得函数的解):
 
  ![img](https://img-blog.csdn.net/20180806201922886?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQ0NTU1Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70) 
 
@@ -83,3 +83,7 @@ https://blog.csdn.net/weixin_39445556/article/details/84502260
 ##### 常用的向量与矩阵的范数总结[L0、L1、L2范数]
 
  https://blog.csdn.net/baidu_36415362/article/details/107224116 
+
+**决策树**
+
+https://blog.csdn.net/weixin_39445556/article/details/84500844 
