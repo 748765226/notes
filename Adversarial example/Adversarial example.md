@@ -2,7 +2,7 @@
 
 # (ICLR 2014) 
 
- But as the resulting computation is automatically discovered by **backpropagation via supervised learning**, it can be **difficult to interpret** and can have **counter-intuitive properties**. 
+But as the resulting computation is automatically discovered by **backpropagation via supervised learning**, it can be **difficult to interpret** and can have **counter-intuitive properties**. 
 
 由于神经网络的模型是通过**监督学习的反向传播**由计算机自主学得，这使得网络**难以解释**且存在**反直觉特性**——网络模型就像是一个*黑盒子*，你无法准确地分析其内部的详细情况，或者说无法得知网络的某种性质是由于其内部的那一部分所引起，这使得网络存在可以攻击的“*弱点* ”。 
 
@@ -110,3 +110,58 @@ Goodfellow发现，基于快速梯度符号法对目标函数进行改进可以�
 >
 >  https://blog.csdn.net/u014380165/article/details/90723948 
 
+
+
+# ADVERSARIAL EXAMPLES IN THE PHYSICAL WORLD (ICLR 2017)
+
+Up to now, all previous work has assumed a threat model in which the adversary can feed data directly into the machine learning classifier. This is not always the case for systems operating in the physical world, for example those which are using signals from cameras and other sensors as input. This paper shows that even in such physical world scenarios, machine learning systems are vulnerable to adversarial examples.
+
+以前的工作都是假定对手能直接对分类器上的输入数据进行操作。但是在现实世界中这种情况不总是满足的，比如用照相机拍摄的照片。这篇文章表明了即使在这样的现实世界场景中，机器学习系统对对抗样本也是脆弱的。
+
+### 对抗样本的生成方法
+
+基于单步/单次FGSM方法修改原图，提出了**Basic Iterative Method** 即FGSM的迭代版本，不同的是，**FGSM**每次是以大步方法e进行更新，而BIM是以多次小步进行更新，其中**0<a<e**，公式如下：
+
+![image-20201008213143352](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201008213143352.png)
+
+鉴于FGSM和BIM都是无目标攻击，采用的是真实标签进行生成对抗样本，提出了**Least-Likely Class Iterative Method** 最小概率类别迭代方法，其中**0<a<e**
+
+![image-20201008213446664](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201008213446664.png)
+
+### 实验一
+
+ ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200505201332286.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L01UYW5kSEo=,size_16,color_FFFFFF,t_70) 
+
+BIM提高epsilon值收益不高，继续提高其值效果不再明显。
+
+LLC方法能在epsilon值很小的时候就达到比较好的效果。
+
+FGSM随着epsilon值不断提高，性能不断提高，与迭代方法比较，它提升性能的原因是每次修改的epsilon值比较大，破坏了原始图像的大部分信息。而迭代方法每次修改的值介于0和epsilon之间。
+
+
+
+### 实验二
+
+ 可以把这种操作看成一个变换T : X → T ( X ) , 如果真实世界中也存在对抗样本, 那么原本的adversarial samples 在经过这个变换之后很有可能也具有对抗的性质, 事实上, 实验显示的确, 虽然其对抗的程度有些许下降.
+
+作者构建了一个指标(重构率)来衡量: ![img](https://upload-images.jianshu.io/upload_images/14709786-ce6ae2276a213841.PNG?imageMogr2/auto-orient/strip|imageView2/2/w/1183/format/webp) 
+
+ ![img](http://www.jjjccc.com/d/file/news/20200422/20190510144615477.png) 
+
+ ![img](http://www.jjjccc.com/d/file/news/20200422/20190510150945635.png) 
+
+从table中可以看出，观察Adv. images对应的那2列(Photos和Source images),使用fast方法产生的Adv. images在进行**Photo Transform**时，准确率变化不明显，而其他iter方法产生的结果则差异较大，可以发现，当进行Photo Transform后，其准确率反而提升了。这里作者给出的解释为：基于iter的方法进行的扰动比较细微，而Photo Transform把这些细微的扰动给抵消了。因此就出现了准确率反而提高的结果。
+
+然后考虑**人为选择**的采样结果:(即在Clean image上正确分类，在Adversary image上错误分类的那些图片作为采样结果。 可以看出，结果与预期一致，原因同上。 
+
+# 总结
+
+优点：提出的攻击方法，一解决了噪声大小（afa介于0与epsilon之间），二是避免没有意义的错误分类（指定目标攻击），并且讨论了通过摄像头实际拍摄对对抗样本带来的影响。
+
+不足：该物理攻击不是很符合实际，一是将对抗样本打印好正对着拍照，而实际生活中，物体应该是多角度，立体的，二是已知被攻击网络的具体攻击，为白盒攻击，但黑盒攻击才更符合实际。
+
+ http://www.jjjccc.com/itjiaocheng/24881.html 
+
+ https://blog.csdn.net/MTandHJ/article/details/105936065
+
+ https://www.jianshu.com/p/2f3b15617236  
