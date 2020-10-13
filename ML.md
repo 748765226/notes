@@ -84,6 +84,20 @@ https://blog.csdn.net/weixin_39445556/article/details/84502260
 
  https://blog.csdn.net/baidu_36415362/article/details/107224116 
 
-**决策树**
 
-https://blog.csdn.net/weixin_39445556/article/details/84500844 
+
+**RNN**
+
+ https://blog.csdn.net/zhaojc1995/article/details/80572098 
+
+ https://zhuanlan.zhihu.com/p/28687529 
+
+ https://zhuanlan.zhihu.com/p/28749444 
+
+**推导** https://zybuluo.com/hanbingtao/note/541458 
+
+ https://zhuanlan.zhihu.com/p/28054589 
+
+**Attension  && self-attension**
+
+https://www.zhihu.com/question/68482809 

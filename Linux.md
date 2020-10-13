@@ -33,7 +33,17 @@
 -R 是指级联应用到目录里的所有子目录和文件
 777 是所有用户都拥有最高权限
 
+ 
 
+Linux查看当前操作系统版本信息 cat /proc/version 
+
+Linux查看版本当前操作系统内核信息 uname -a
+
+linux查看版本当前操作系统发行信息 cat /etc/issue 或 cat /etc/centos-release
+
+Linux查看cpu相关信息，包括型号、主频、内核信息等 cat /etc/cpuinfo
+
+lspci   安装pciutils 
 
 **Screen**
 
@@ -282,3 +292,121 @@ w(e) 移动光标到下一个单词. b 移动光标到上一个单词.
 向前向后翻页 ctrl+f 和 ctrl+b.
 % 跳转到相配对的括号.
   G(shift+g)   - go to the last line in the vim editor (文件的末尾)  1G - goto line number 1(文件的开始) 20G - goto line number 20
+
+
+
+**查看GPU型号**
+
+**lspci | grep -i nvidia**
+
+**查看NVIDIA驱动版本**
+
+**sudo dpkg --list | grep nvidia-***
+
+**或者**
+
+**cat /proc/driver/nvidia/version**
+
+### **ubuntu sudo update与upgrade的作用及区别**
+
+ https://blog.csdn.net/beckeyloveyou/article/details/51352426 
+
+### Ubuntu18.04下更改apt源为阿里云源
+
+ https://blog.csdn.net/zhangjiahao14/article/details/80554616 
+
+### 解决ubuntu分辨率问题
+
+https://blog.csdn.net/simmonloyld/article/details/87393775
+
+### 显卡，显卡驱动,nvcc, cuda driver,cudatoolkit,cudnn
+
+ https://zhuanlan.zhihu.com/p/91334380 
+
+**CUDA Toolkit** 包括 **1.Compiler**: CUDA-C和CUDA-C++编译器`NVCC`  **2.Tools**: 提供一些像`profiler`,`debuggers`等工具  **3.Libraries**: 下面列出的部分科学库和实用程序库  **4.CUDA Samples**: 演示如何使用各种CUDA和library API的代码示例  **5.CUDA Driver**: 运行CUDA应用程序需要系统至少有一个**具有CUDA功能的GPU**和**与CUDA工具包兼容的驱动程序**  
+
+![img](https://pic1.zhimg.com/80/v2-fc8c720a858b6c2583b09f0228c4b3e0_720w.jpg)
+
+而显卡GPU driver功能上等价于cuda toolkit里面的cuda driver。但cuda有两个API Runtime API和Driver API ，这两个API都有对应的CUDA版本 ， 
+
+用于支持**driver API**的必要文件(如`libcuda.so`)是由**GPU driver installer**安装的。`nvidia-smi`就属于这一类API。  
+
+用于支持**runtime API**的必要文件(如`libcudart.so`以及`nvcc`)是由**CUDA Toolkit installer**安装的。（**CUDA Toolkit Installer有时可能会集成了GPU driver Installer**）。`nvcc`是与CUDA Toolkit一起安装的CUDA compiler-driver tool，它只知道它自身构建时的CUDA runtime版本。它不知道安装了什么版本的GPU driver，甚至不知道是否安装了GPU driver。  
+
+如果driver API和runtime API的CUDA版本不一致可能是因为使用的是单独的（显卡）GPU driver installer，而不是CUDA Toolkit installer里的GPU driver installer。 
+
+ ![img](https://pic3.zhimg.com/80/v2-a1f1d9f699697a8e05979abf749fbeae_720w.jpg) 
+
+```
+检测pytorch在当前cuda版本中是可用
+import torch 
+print(torch.cuda.is_available())
+
+torch.cuda.get_device_name(0)
+```
+
+### docker教程
+
+docker image ls  \# 列出本机的所有 image 文件 
+
+docker image rm [image_name] \# 删除 image文件 
+
+docker container run [image_name]  会从一个镜像文件中生成一个容器实例,并且运行它
+
+docker container run命令具有自动抓取 image 文件的功能。如果发现本地没有指定的 image 文件，就会从仓库自动抓取。docker image pull命令并不是必需的步骤。 
+
+ docker container ls  # 查看当前运行容器 
+
+ docker container ls --all   \# 列出本机所有容器，包括终止运行的容器 
+
+ 终止运行的容器文件依然会占用硬盘空间,可以使用docker container rm [container_id]命令删除 
+
+
+
+以下命令使用 ubuntu 镜像**启动**一个容器，参数为以命令行模式进入该容器：
+
+**docker run -it ubuntu /bin/bash**
+
+-it : 容器的shell会映射到当前本地的shell,你在本机窗口输入的命令会传入到容器中 
+
+**查看**所有的容器（**包括已停止**的）命令如下：
+
+**docker ps -a**
+
+使用 **docker start** **重启一个已停止**的容器：
+
+**docker start container_id**
+
+希望 docker 的服务是在**后台运行**的，我们可以过 **-d** 指定容器的运行模式。
+
+**docker run -itd --name ubuntu-test ubuntu /bin/bash**
+
+ 加了 **-d** 参数默认不会进入容器，想要进入容器需要使用指令 **docker exec** 
+
+ **停止容器** 
+
+**docker stop <容器 ID>**
+
+在使用 **-d** 参数时，容器启动后会进入后台。此时想要进入容器，可以通过以下指令进入：
+
+- **docker attach**(粘贴到当前终端)
+- **docker exec**：推荐大家使用 docker exec 命令，因为此退出容器终端，不会导致容器的停止。
+
+
+
+如果要**导出本地某个容器**，可以使用 **docker export** 命令。
+
+ **docker export 1e560fca3906 > ubuntu.tar**  这样将导出容器快照到本地文件 
+
+
+
+可以使用 **docker import** 从容器快照文件中再导入为镜像，以下实例将快照文件 ubuntu.tar 导入到镜像 test/ubuntu:v1:
+
+ cat docker/ubuntu.tar | **docker import - test/ubuntu:v1**
+
+
+
+下面的命令可以**清理掉所有处于终止状态的容器**。
+
+**docker container prune**
+
