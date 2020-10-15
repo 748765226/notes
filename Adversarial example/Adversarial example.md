@@ -154,7 +154,7 @@ FGSM随着epsilon值不断提高，性能不断提高，与迭代方法比较，
 
 然后考虑**人为选择**的采样结果:(即在Clean image上正确分类，在Adversary image上错误分类的那些图片作为采样结果。 可以看出，结果与预期一致，原因同上。 
 
-# 总结
+### 总结
 
 优点：提出的攻击方法，一解决了噪声大小（afa介于0与epsilon之间），二是避免没有意义的错误分类，并且讨论了通过摄像头实际拍摄对对抗样本带来的影响。
 
@@ -165,3 +165,58 @@ FGSM随着epsilon值不断提高，性能不断提高，与迭代方法比较，
  https://blog.csdn.net/MTandHJ/article/details/105936065
 
  https://www.jianshu.com/p/2f3b15617236  
+
+
+
+# The Limitations of Deep Learning in Adversarial Settings
+
+# （Papernot EuroS&P 2016）
+
+### 文章概述
+
+与之前的基于**提高原始类别标记的损失函数或者降低目标类别标记的损失函数**的方式不同，这篇文章提出直接增加神经网络对目标类别的预测值。换句话说，之前的对抗样本的扰动方向都是损失函数的梯度方向（无论是原始类别标记的损失函数还是目标类别标记的损失函数），该论文生成的对抗样本的扰动方向是目标类别标记的预测值的梯度方向，作者将这个梯度称为**前向梯度（forward derivative）**。本文主要介绍了一种新的对抗样本攻击方法，利用输入特征到输出值之间的**对抗性显著性**，达到只需修改少量的输入值即可误分类的目的。该攻击方法属于**targeted攻击**。文章指出**Forward derivatives approaches are much more powerful than gradient descent techniques used in prior systems.**
+
+### 实施细节
+
+ ![img](https://img-blog.csdnimg.cn/2019062014502317.png) 
+
+#### Step 1: 计算前向导数
+
+ ![img](https://img-blog.csdnimg.cn/20190620150409495.png) 
+
+#### Step 2: 基于前向导数构造显著图S 
+
+ ![img](https://img-blog.csdnimg.cn/20190620153442764.png) 
+
+ ![img](https://img-blog.csdnimg.cn/20190620153601147.png) 
+
+#### Step 3: 利用θ 修改输入特征imax 
+
+但是在实际操作时，每次选择一个像素点太严格(很难满足otherwise的条件，(上面的方式1和方式2))，于是作者提出了采用一组像素点而不是一个像素点的方法。
+
+####  ![img](https://img-blog.csdnimg.cn/20190620180350967.png)   
+
+ ![img](https://img-blog.csdnimg.cn/20190620180250952.png) 上图中的算法2就是作者实际采用的方法，算法3是使用像素点对的启发式搜索算法。其中，作者在算法3想要找到的( p 1 , p 2 ) 满足下式
+
+ ![img](https://img-blog.csdnimg.cn/20190620180745567.png) 
+
+**像素点对的组合方式过多，计算存在负担**
+
+**实际操作：作者采用的是最后1层的隐藏层输出结果来进行前向传播的计算而非最后的output probability layer的结果。原因是这两个层之间的逻辑回归计算引入的极端变化以确保概率之和为1，从而导致极端导数值。这降低了神经元如何被不同输入激活的信息质量，并导致前向导数在生成显著性映射时精度较低。此外最后一个隐层也由10个神经元组成，每个神经元对应一个数字类0到9，处理起来效果更好。**
+
+ ![img](https://img-blog.csdnimg.cn/20190620182849255.png)  ![img](https://img-blog.csdnimg.cn/20190620182815242.png) 
+
+对于前面的2种显著图的生成方式，作者也展示了相应的结果：下面左图是方式1生成的结果，右图是方式2生成的结果。可以看出，方式2产生的结果比较不容易被人类察觉。但是方式2在扰动阈值的限制下成功攻击的概率只有64.7% 而方式1则能达到97%(Fig. 11)。这也是合理的，因为去除像素降低了信息熵，从而使得DNNs更难提取分类样本所需的信息。
+
+### 参考
+
+https://blog.csdn.net/Invokar/article/details/96697862
+
+https://blog.csdn.net/qq_44109982/article/details/107682952
+
+https://blog.csdn.net/qq_36415775/article/details/89205794
+
+https://zhuanlan.zhihu.com/p/33501618
+
+https://mathpretty.com/10683.html **(Sliency Map)**
+

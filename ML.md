@@ -101,3 +101,17 @@ https://blog.csdn.net/weixin_39445556/article/details/84502260
 **Attension  && self-attension**
 
 https://www.zhihu.com/question/68482809 
+
+**可视化神经网络**
+
+https://blog.csdn.net/zxyhhjs2017/article/details/88640547
+
+**（待看）**https://www.sohu.com/a/124362782_465975
+
+**Saliency Map**
+
+https://mathpretty.com/10683.html
+
+**论坛**
+
+**（待看）**https://mathpretty.com/
