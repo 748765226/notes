@@ -220,3 +220,68 @@ https://zhuanlan.zhihu.com/p/33501618
 
 https://mathpretty.com/10683.html **(Sliency Map)**
 
+https://blog.csdn.net/zxyhhjs2017/article/details/88640547
+
+
+
+# One Pixel Attack for Fooling Deep Neural Networks(CVPR2017)
+
+# Nicolas Papernot 尼古拉斯 Papernot
+
+### Motivation
+
+most of the previous attacks did not consider extremely limited scenarios for adversarial attacks, namely the modification might be excessive (i.e., the amount of modified pixels is fairly large) such that it may be perceptible to human eyes.
+
+### One Pixel Attack![在这里插入图片描述](https://img-blog.csdnimg.cn/20200704160653172.png) 
+
+如图所示，这个4×4的表格代表着加在origin image上的perturbations，一般的attack是相当于改变整张图片的像素值来产生对抗样本，而该方法仅改变one pixel即可实现对抗攻击。如果改变的这一个pixel整好与背景颜色相差不大，那图像会非常棒。
+ 通过损失函数来看，两者区别就是约束部分： 
+
+一般的attack：       
+
+​									 				     ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200704183051301.png)               
+
+在这里插入图片描述 是让产生的perturbations小于L或者L-infinity normal必须要小于某个值  而one pixel attack：               
+
+​     												  ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200704151340171.png)        
+
+在这里插入图片描述 是让产生的perturbations的L0范数小于d（d=1），即perturbations种只有一个像素点不为0，也就是对抗样本实际上只改变了一个像素点。
+
+现在问题来了，How do we find the exact pixel and value？有一种笨拙的办法，将224*224个像素点一一更改，找到最优的那个值。但是时间会很长，因为你每次改变你的像素值，都要放到model里去检测一下。下面作者很聪明，将差分进化算法应用了进来。
+
+### Differential Evolution  
+
+差分进化算法一共分为4部分： 
+
+**初始化种群：**
+
+​    												     ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200704152901701.png)       
+
+ **变异：**     
+
+​														  ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200704152957693.png)         
+
+ **交叉：**     
+
+​         												 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200704153057955.png) 
+
+**挑选：**            
+
+​														   ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200704153136525.png)  
+
+初始化种群的时候，我们种群中的每个个体都是（x,y,R,G,B)这样一个5维的向量，变异-挑选三个过程反复进行。初始种群内产生变异，变异种群与原种群进行交叉，再对交叉后产生的种群与原种群进行对比。会使种群不断的淘汰差的个体，留下优良个体，由优良个体组成的新一代种群继续进行此操作。大约进行6次，即可得到较好的种群，可从中挑选最优的值作为最终的结果。使用DE 有什么好处： 
+
+1.有更高的几率可以找到全局最优点。因为变异产生的种群具有多样性的特点且至少使用了一组候选方案。
+2.需要目标模型很少的信息，相比于FGSM来说，DE不需要梯度信息，因此不需要model太多细节。
+
+
+
+https://blog.csdn.net/qq_48996375/article/details/107128978
+
+https://www.cnblogs.com/fourmi/p/10117832.html
+
+**差分进化算法** 
+
+https://blog.csdn.net/qq_37423198/article/details/77856744 
+
+https://blog.csdn.net/changyuanchn/article/details/80331134
