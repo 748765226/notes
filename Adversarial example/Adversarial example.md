@@ -285,3 +285,13 @@ https://www.cnblogs.com/fourmi/p/10117832.html
 https://blog.csdn.net/qq_37423198/article/details/77856744 
 
 https://blog.csdn.net/changyuanchn/article/details/80331134
+
+
+
+# Towards Evaluating the Robustness of Neural Networks
+
+**补充知识：蒸馏防御深度神经网络中的对抗扰动**
+
+**《Distillation as a Defense to Adversarial Perturbations against Deep Neural Networks》** 
+
+**参考：**https://zhuanlan.zhihu.com/p/31177892
