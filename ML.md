@@ -94,6 +94,12 @@ https://blog.csdn.net/weixin_39445556/article/details/84502260
 
  https://zhuanlan.zhihu.com/p/28749444 
 
+**RNN一文解析以及Embedding**
+
+https://zhuanlan.zhihu.com/p/51383402
+
+https://zhuanlan.zhihu.com/p/89637281
+
 **推导** https://zybuluo.com/hanbingtao/note/541458 
 
  https://zhuanlan.zhihu.com/p/28054589 
@@ -101,6 +107,10 @@ https://blog.csdn.net/weixin_39445556/article/details/84502260
 **Attension  && self-attension**
 
 https://www.zhihu.com/question/68482809 
+
+**RNN推广总结**
+
+https://zhuanlan.zhihu.com/p/148122328
 
 **可视化神经网络**
 
