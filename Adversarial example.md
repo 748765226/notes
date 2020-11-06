@@ -459,3 +459,27 @@ https://blog.csdn.net/Invokar/article/details/96698876
 https://zhuanlan.zhihu.com/p/220421894 (翻译)
 
 https://www.dazhuanlan.com/2019/12/09/5dee1b61a6844/
+
+
+
+# Universal adversarial perturbations (CVPR2017)
+
+对于任意给定的高效DNN分类器，作者都能为输入图片施加一个扰动，使得分类器以较大概率分类错误，从而实现对于dDCNN的攻击。这个“扰动”有两个特点：１.universal，即扰动与输入图片无关，仅与模型本身相关。２.very small，具有小的范数，从而不改变图片本身的结构。另外，作者提出了一个算法，使得对于不同的模型VGG、GoogLeNet、ResNet等都很容易计算出各自对应的扰动。 
+
+
+
+https://blog.csdn.net/invokar/article/details/99574958
+
+https://zhuanlan.zhihu.com/p/159157525
+
+https://www.cnblogs.com/MTandHJ/p/13040274.html
+
+https://blog.csdn.net/lxk9409/article/details/80489105
+
+
+
+# UPSET and ANGRI : Breaking High Performance Image Classifiers
+
+https://blog.csdn.net/weixin_43150428/article/details/106106762
+
+https://www.sohu.com/a/301955766_99979179
