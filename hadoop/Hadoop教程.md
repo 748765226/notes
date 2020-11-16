@@ -25,23 +25,23 @@ tags: [Hadoop,Java,ssh]
 
 ### 第一步：Java安装教程
 
-**参考：**https://www.jianshu.com/p/f000e05f3512
+**下载JDK 8**        
 
-![image-20201115193755113](F:\Users\Administrator\Desktop\notes\hadoop\JavaSE8.png)
+链接：https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html
 
-
+ ![](https://i.loli.net/2020/11/16/YoRk2V7CP5UXEDz.png) 
 
 
 
 **将下载好的Java 8压缩包传进服务器，推荐使用sftp命令或者软件Xftp**
 
-![image-20201115200442674](F:\Users\Administrator\Desktop\notes\hadoop\Xftp.png)
+![](https://i.loli.net/2020/11/16/MY5UQVd8ykNuvLs.png) 
 
 
 
 **进行解压**
 
-![image-20201115200627333](F:\Users\Administrator\Desktop\notes\hadoop\解压java8压缩包.png)
+![](https://i.loli.net/2020/11/16/KP27owXC6UmWJZf.png) 
 
 
 
@@ -49,7 +49,7 @@ tags: [Hadoop,Java,ssh]
 
 1.在终端输入 `cd` 进入~目录，修改环境变量，输入`vi .bashrc` 
 
-![image-20201115203243201](F:\Users\Administrator\Desktop\notes\hadoop\修改java环境变量.png)
+![](https://i.loli.net/2020/11/16/jI7VPwJuT2DLCmt.png) 
 
 2.点击键盘 `i` 或者`insert` 在末行添加下列
 
@@ -62,15 +62,15 @@ export PATH=$PATH:$JAVA_HOME/bin
 
 3.点击键盘`ESC`，输入`:wp `退出并保存文件
 
-![image-20201115203430227](F:\Users\Administrator\Desktop\notes\hadoop\添加java环境变量.png)
+![](https://i.loli.net/2020/11/16/7uyQSRsGNYaoAXp.png) 
 
 4.`source .bashrc` #让设置的变量马上生效，否则得重启生效
 
-![image-20201115203528255](F:\Users\Administrator\Desktop\notes\hadoop\java环境变量生效.png)
+ ![](https://i.loli.net/2020/11/16/ORxdSFcW2sYIhp6.png) 
 
 **查看Java版本**
 
-![image-20201115203631216](F:\Users\Administrator\Desktop\notes\hadoop\查看java版本.png)
+![](https://i.loli.net/2020/11/16/Yi6T3NJOWfthgIc.png) 
 
 
 
@@ -78,21 +78,21 @@ export PATH=$PATH:$JAVA_HOME/bin
 
 **下载hadoop2.9.2**
 
-![image-20201115205552339](F:\Users\Administrator\Desktop\notes\hadoop\hadoop下载.png)
+![](https://i.loli.net/2020/11/16/HthS1TafLkOlBze.png) 
 
-![image-20201115205643091](F:\Users\Administrator\Desktop\notes\hadoop\hadoop2.9.2.png)
+![](https://i.loli.net/2020/11/16/O4Q8NaeYPgbkK5p.png) 
 
 
 
 **同理，利用Xftp 将下载好的文件上传到服务器**
 
-![image-20201115205851988](F:\Users\Administrator\Desktop\notes\hadoop\上传hadoop.png)
+![](https://i.loli.net/2020/11/16/kNra1E6F4tsXUjq.png) 
 
 
 
 **输入`tar -xzvf hadoop-2.9.2.tar.gz`**
 
-![image-20201115210120128](F:\Users\Administrator\Desktop\notes\hadoop\解压hadoop.png)
+ ![](https://i.loli.net/2020/11/16/A2mcVxaRQe76sGC.png) 
 
 
 
@@ -104,7 +104,7 @@ export PATH=$PATH:$JAVA_HOME/bin
 
 ​				   ` mkdir -p hadoop_tmp/hdfs/datanode `
 
-![image-20201115210543729](F:\Users\Administrator\Desktop\notes\hadoop\创建namenode和datanode.png)
+![img](https://i.loli.net/2020/11/16/6uUMZC1VpRyLlI8.png) 
 
 
 
@@ -128,7 +128,7 @@ export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
 export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
 ```
 
-![image-20201115211406499](F:\Users\Administrator\Desktop\notes\hadoop\hadoop环境变量配置.png)
+![](https://i.loli.net/2020/11/16/sJwmpYCGlt3TEfd.png) 
 
 4.键盘`ESC`输入`:wq`保存退出，并且输入`source ~/.bashrc`使其生效
 
@@ -138,13 +138,15 @@ export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
 
 或者`  export JAVA_HOME=/root/hadoop-2.9.2`
 
-![image-20201115215119206](F:\Users\Administrator\Desktop\notes\hadoop\hadoop.png)
+![](https://i.loli.net/2020/11/16/2nyCsK4vkjqYpHI.png) 
+
+
 
 **更新hadoop配置文件（四个文件）**
 
 1.终端进入`cd ~/hadoop-2.9.2`(hadoop解压后的地址) 修改`vi etc/hadoop/core-site.xml`
 
-![image-20201115212003747](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201115212003747.png)
+![](https://i.loli.net/2020/11/16/aKDMLRBiNZCzf9J.png) 
 
 2.插入以下
 
@@ -156,11 +158,11 @@ export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
 </property>
 ```
 
-![image-20201115212527973](F:\Users\Administrator\Desktop\notes\hadoop\修改core-site.xml.png)
+![](https://i.loli.net/2020/11/16/4AkaQDSVRPoGrvY.png) 
 
 **如果上述vi修改麻烦可以在本地修改后通过xftp传到对应目录下覆盖**
 
-![image-20201115212929054](F:\Users\Administrator\Desktop\notes\hadoop\xftp上传hadoop配置文件.png)
+![](https://i.loli.net/2020/11/16/bqVUe4ioChr3vI1.png) 
 
 **剩下三个文件同理这里就不一一赘述，贴上需要修改的文件和代码**
 
@@ -184,7 +186,7 @@ export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
  </property>
 ```
 
-![image-20201115214025444](F:\Users\Administrator\Desktop\notes\hadoop\hdfs-site.png)
+![](https://i.loli.net/2020/11/16/bl4APa1xcqD8LSn.png) 
 
 第三个文件： yarn-site.xml 
 
@@ -201,7 +203,7 @@ export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
 
 ```
 
-![image-20201115213656328](F:\Users\Administrator\Desktop\notes\hadoop\yarn-site.png)
+![](https://i.loli.net/2020/11/16/pikKlZ3sdJXmaFb.png) 
 
 第四个文件： mapred-site.xml 
 
@@ -217,7 +219,7 @@ export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
 </property>
 ```
 
-![image-20201115213738597](F:\Users\Administrator\Desktop\notes\hadoop\mapred-site.png)
+![](F:\Users\Administrator\Desktop\notes\hadoop\mapred-site.png)
 
 
 
@@ -234,7 +236,7 @@ net.ipv6.conf.default.disable_ipv6 = 1
 net.ipv6.conf.lo.disable_ipv6 = 1
 ```
 
-![image-20201115205232721](F:\Users\Administrator\Desktop\notes\hadoop\禁用IPv6.png)
+![](https://i.loli.net/2020/11/16/fZW1xQ3bpSMlsuE.png) 
 
 
 
