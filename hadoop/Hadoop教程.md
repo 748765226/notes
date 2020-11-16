@@ -7,9 +7,13 @@ tags: [Hadoop,Java,ssh]
 
 # Hadoop教程
 
+本教程只记录个人安装Hadoop时的心得以及所踩的坑，若有不对之处欢迎指出交流！
+
+如果需要教程中的文件和工具可与本人进行联系，有任何问题随时欢迎在评论区留言以及右下角即时通信。
+
 <!--more-->
 
-教程不易，请各位大佬麻烦点点Github关注，所需文件和工具可与本人进行联系（评论区或者右下角通信）。此外，建议所有命令建议手敲，本教程根据本人的理解将安装所遇到的坑与心得进行步骤详解，有不对的地方欢迎各位大佬指出！
+## 准备工作
 
 ### Hadoop Java对应版本号
 
@@ -19,7 +23,7 @@ tags: [Hadoop,Java,ssh]
 
   
 
-**本次教程使用的是Java 8和hadoop 2.9.2，总共分为三步，第一步Java安装，hadoop单节点安装，ssh免密通信以及hadoop多节点安装**
+### 本次教程使用的是Java 8和hadoop 2.9.2，总共分为三步，第一步Java安装，hadoop单节点安装，ssh免密通信以及hadoop多节点安装
 
 
 
@@ -27,7 +31,7 @@ tags: [Hadoop,Java,ssh]
 
 **下载JDK 8**        
 
-链接：https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html
+[JDK 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
 
  ![](https://i.loli.net/2020/11/16/YoRk2V7CP5UXEDz.png) 
 
@@ -54,7 +58,7 @@ tags: [Hadoop,Java,ssh]
 2.点击键盘 `i` 或者`insert` 在末行添加下列
 
 ```
-export JAVA_HOME=/usr/local/java/jdk1.8.0_191
+export JAVA_HOME=/root/hadoop-2.9.2
 export CLASSPATH=.:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 export PATH=$PATH:$JAVA_HOME/bin
 #（！！！注意：JAVA_HOME的路径是你实际解压后的JDK的路径，千万别写错了）
@@ -64,7 +68,7 @@ export PATH=$PATH:$JAVA_HOME/bin
 
 ![](https://i.loli.net/2020/11/16/7uyQSRsGNYaoAXp.png) 
 
-4.`source .bashrc` #让设置的变量马上生效，否则得重启生效
+4.终端输入`source .bashrc` #让设置的变量马上生效，否则得重启生效
 
  ![](https://i.loli.net/2020/11/16/ORxdSFcW2sYIhp6.png) 
 
@@ -77,6 +81,8 @@ export PATH=$PATH:$JAVA_HOME/bin
 ### Hadoop单节点安装教程
 
 **下载hadoop2.9.2**
+
+ [Hadoop下载](http://ftp.cuhk.edu.hk/pub/packages/apache.org/hadoop/common/)
 
 ![](https://i.loli.net/2020/11/16/HthS1TafLkOlBze.png) 
 
@@ -134,9 +140,9 @@ export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
 
 5.输入`vi etc/hadoop/hadoop-env.sh` 修改JAVA_HOME
 
-`  export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 `
+`  export JAVA_HOME=/root/hadoop-2.9.2`  
 
-或者`  export JAVA_HOME=/root/hadoop-2.9.2`
+#（！！！注意：JAVA_HOME的路径是你实际解压后的JDK的路径，千万别写错了）
 
 ![](https://i.loli.net/2020/11/16/2nyCsK4vkjqYpHI.png) 
 
@@ -148,7 +154,7 @@ export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
 
 ![](https://i.loli.net/2020/11/16/aKDMLRBiNZCzf9J.png) 
 
-2.插入以下
+2.插入下面代码
 
 ```
 #Add those lines in the configuration section
@@ -219,7 +225,7 @@ export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
 </property>
 ```
 
-![](F:\Users\Administrator\Desktop\notes\hadoop\mapred-site.png)
+ ![](https://s3.ax1x.com/2020/11/16/Dk1R3T.png) 
 
 
 
@@ -244,7 +250,7 @@ net.ipv6.conf.lo.disable_ipv6 = 1
 
 终端输入 `hdfs namenode -format `
 
-![image-20201115222214199](F:\Users\Administrator\Desktop\notes\hadoop\格式化namenode.png)
+ ![](https://s3.ax1x.com/2020/11/16/Dk3nVs.png) 
 
 
 
@@ -252,9 +258,7 @@ net.ipv6.conf.lo.disable_ipv6 = 1
 
 终端输入` start-dfs.sh `
 
-如果没有设置ssh 密钥对的话要输入密码登录，想要免密登录见下个部分
-
-![image-20201115222516500](F:\Users\Administrator\Desktop\notes\hadoop\hdfs.png)
+如果没有设置ssh 密钥对的话要输入密码登录，想要免密登录见下个部分 ![](https://s3.ax1x.com/2020/11/16/Dk3ZrQ.png) 
 
 
 
@@ -272,7 +276,7 @@ net.ipv6.conf.lo.disable_ipv6 = 1
 
 **验证是否成功**（成功看到7个节点开启才算成功，如果某个节点或者任务没开启请移步日志）
 
-![image-20201115224056805](F:\Users\Administrator\Desktop\notes\hadoop\单节点验证.png)
+ ![](https://s3.ax1x.com/2020/11/16/Dk3AxS.png) 
 
 
 
@@ -282,7 +286,7 @@ net.ipv6.conf.lo.disable_ipv6 = 1
 
 1.首先在master服务器上输入`ssh-keygen -t rsa`生成SSH秘钥对
 
-![image-20201115225957720](F:\Users\Administrator\Desktop\notes\hadoop\masterssh.png)
+ ![](https://s3.ax1x.com/2020/11/16/Dk3VKg.png) 
 
 2.还是在master上给.ssh文件夹设置权限，否则等下使用ssh连接时报错
 
@@ -292,9 +296,7 @@ net.ipv6.conf.lo.disable_ipv6 = 1
 
 终端执行`scp .ssh/id_rsa.pub root@47.97.9.116 /root/.ssh/authorized_keys`
 
-需要输入slave3的登录密码
-
-![image-20201115230808919](F:\Users\Administrator\Desktop\notes\hadoop\ssh1.png)
+需要输入slave3的登录密码 ![](https://s3.ax1x.com/2020/11/16/Dk3ebj.png) 
 
 至此，执行ssh slave3的公网ip比如（ssh 47.8.9.0）就可以实现免密登录到slave3了
 
@@ -304,7 +306,7 @@ net.ipv6.conf.lo.disable_ipv6 = 1
 
 终端修改/etc/hosts 
 
-![image-20201115231615671](F:\Users\Administrator\Desktop\notes\hadoop\hosts.png)
+ ![](https://s3.ax1x.com/2020/11/16/Dk3uan.png) 
 
 5.执行ssh slave3或者ssh slave3的公网ip都可以实现从master免密登录到slave3（归功于上一步）
 
