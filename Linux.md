@@ -95,6 +95,8 @@ dpkg -l | grep xxx//查询已安装包 sudo apt remove --purge dock.io//针对�
 
 
 
+sudo apt install net-tools(ifconfig)
+
 
 
 sudo ufw status **查看防火墙状态**
