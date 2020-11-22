@@ -45,6 +45,14 @@ Linux查看cpu相关信息，包括型号、主频、内核信息等 cat /etc/cp
 
 lspci   安装pciutils 
 
+netstat -an | grep 9000 查看9000端口是否被占用（listen占用）
+
+netstat -tunlp|grep 9000 查看9000端口被什么进程占用
+
+kill -9 PID 杀死占用9000端口进程的PID
+
+
+
 **Screen**
 
 screen -S xxx //创建一个screen，按住Ctrl，依次按a+d暂离会话，依次按a+c创建子会话，a+2,切换会话
@@ -108,6 +116,10 @@ sudo ufw enable/disable
 /etc/hostname  主机名
 
 /etc/hosts
+
+hostname xxx 临时修改主机名
+
+hostnamectl set-hostname xxx 一次性永久修改主机名
 
 
 
