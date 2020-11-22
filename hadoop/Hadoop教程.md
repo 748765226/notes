@@ -352,17 +352,13 @@ net.ipv6.conf.lo.disable_ipv6 = 1
 </configuration> 
 ```
 
-![image-20201122191212389](F:\Users\Administrator\Desktop\notes\hadoop\1.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGVRH0.png) 
 
 
 
 2.修改 hdfs-site.xml  输入`vi etc/hadoop/hdfs-site.xml` 更新`dfs.replication`的value值为4
 
-```
-
-```
-
-![image-20201122191140199](F:\Users\Administrator\Desktop\notes\hadoop\2.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGVfEV.png) 
 
 
 
@@ -387,7 +383,7 @@ net.ipv6.conf.lo.disable_ipv6 = 1
 </property> 
 ```
 
-![image-20201122191440003](F:\Users\Administrator\Desktop\notes\hadoop\3.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGVhNT.png) 
 
 
 
@@ -404,19 +400,19 @@ net.ipv6.conf.lo.disable_ipv6 = 1
 </property>
 ```
 
-![image-20201122191639638](F:\Users\Administrator\Desktop\notes\hadoop\4.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGV2Bq.png) 
 
 
 
 5.修改 masters 输入`vi etc/hadoop/masters` 添加 master
 
-![image-20201122191655945](F:\Users\Administrator\Desktop\notes\hadoop\5.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGVgun.png) 
 
 
 
 6.修改 slaves `vi etc/hadoop/slaves`   添加 slave1 slave2 slave3
 
-![image-20201122191706661](F:\Users\Administrator\Desktop\notes\hadoop\6.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGV44U.png) 
 
 
 
@@ -435,7 +431,7 @@ xxxx  slave2 # slave2的内网ip
 xxxx  slave3 # slave3的内网ip
 ```
 
-![image-20201122192326785](F:\Users\Administrator\Desktop\notes\hadoop\7.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGVICF.png) 
 
 **！！！这里有个大坑，这里的ip一定要用内网，别问为什么，并且要将原来的内网ip注释掉**
 
@@ -453,13 +449,11 @@ xxxx  slave3 # slave3的内网ip
 
 第一种是将master节点保存成镜像，然后再利用此镜像创建三个slave实例（推荐此方式，操作看截图）
 
-![image-20201122192037164](F:\Users\Administrator\Desktop\notes\hadoop\8.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGVTgJ.png) 
 
-![image-20201122192047130](F:\Users\Administrator\Desktop\notes\hadoop\9.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGVo34.png) 
 
-![image-20201122192054381](F:\Users\Administrator\Desktop\notes\hadoop\10.png)
-
-
+ ![](https://s3.ax1x.com/2020/11/22/DGVqD1.png) 
 
 第二种，从头分别搭建三个单节点（略过）
 
@@ -483,7 +477,7 @@ xxxx  slave3 # slave3的内网ip
 
 12.最后在master节点和slave节点上分别输入jps，查看结果。下图为正确结果，如果缺少则配置错误
 
-![image-20201122192500788](F:\Users\Administrator\Desktop\notes\hadoop\11.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGV7v9.png) 
 
 
 
@@ -503,15 +497,13 @@ xxxx  slave3 # slave3的内网ip
 
 执行`hadoop dfs -copyFromLocal /root/hadoop-2.9.2/data /data`
 
-本条指令执行将本地/root/hadoop-2.9.2/下的data 复制到hadoop文件系统的 根目录/下
-
-![image-20201122192621843](F:\Users\Administrator\Desktop\notes\hadoop\12.png)
+本条指令执行将本地/root/hadoop-2.9.2/下的data 复制到hadoop文件系统的 根目录`/`下 ![](https://s3.ax1x.com/2020/11/22/DGVbuR.png) 
 
 
 
 4.查看上传结果`hadoop dfs -ls /data`
 
-![image-20201122192750245](F:\Users\Administrator\Desktop\notes\hadoop\13.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGVXE6.png) 
 
 5.创建执行的脚本`vi word_count.sh` 输入以下
 
@@ -525,9 +517,9 @@ hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.9.2.jar wordcount 
 
 `bash word_count.sh`
 
-![image-20201122192916216](F:\Users\Administrator\Desktop\notes\hadoop\14.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGVjUK.png) 
 
-![image-20201122193012344](F:\Users\Administrator\Desktop\notes\hadoop\15.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGVv4O.png) 
 
 7.分别执行
 
@@ -535,7 +527,7 @@ hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.9.2.jar wordcount 
 
 `hadoop dfs -cat /result/part-r-00000`
 
-![image-20201122193229349](F:\Users\Administrator\Desktop\notes\hadoop\16.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGVLHx.png) 
 
 
 
@@ -543,17 +535,17 @@ hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.9.2.jar wordcount 
 
 首先将端口打开
 
-![image-20201122193506698](F:\Users\Administrator\Desktop\notes\hadoop\17.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGVzCD.png) 
 
-![image-20201122193554184](F:\Users\Administrator\Desktop\notes\hadoop\18.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGZS8e.png) 
 
-![image-20201122193632566](F:\Users\Administrator\Desktop\notes\hadoop\19.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGZ9vd.png) 
 
-![image-20201122193726503](F:\Users\Administrator\Desktop\notes\hadoop\20.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGZpgH.png) 
 
 最后在浏览器输入`公网ip:端口号`即可查看结果
 
-![image-20201122194137721](F:\Users\Administrator\Desktop\notes\hadoop\21.png)
+ ![](https://s3.ax1x.com/2020/11/22/DGZPKA.png) 
 
 
 
@@ -563,11 +555,11 @@ hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.9.2.jar wordcount 
 
 1.如果遇到
 
-![image-20201122194519953](F:\Users\Administrator\Desktop\notes\hadoop\22.png)
+![](https://s3.ax1x.com/2020/11/22/DGZiDI.png) 
 
 则 修改要保存的路径`vi word_count.sh`
 
-![image-20201122194626817](F:\Users\Administrator\Desktop\notes\hadoop\23.png)
+![](https://s3.ax1x.com/2020/11/22/DGZFbt.png) 
 
 或者执行`hadoop dfs -rm -r /result` 将hadoop文件系统生成/result删除，就不会报错了
 
