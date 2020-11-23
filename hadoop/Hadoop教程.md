@@ -16,7 +16,7 @@ tags: [Hadoop,Java,ssh]
 **注意！！！需要hadoop和jdk安装包的话，需要点进去具体资源进行下载，直接下载我的分支会出现问题。**
 
 
-### 问题总结：
+### 单节点问题总结：
 
 1.Hadoop 2.x namenode界面访问端口默认是50070
 
@@ -30,7 +30,38 @@ tags: [Hadoop,Java,ssh]
 
 5.如果上述情况避开了，还遇到namenode或者datanode打不开的问题，请大家移步安装目录下logs找到对应节点的日志下拉到最底下，找到错误自行百度或者评论区留言。
 
-**！！！终极大招，不太推荐使用，除非实在解决不了配置问题，又不想重搭环境，并且可以承担之前跑的数据丢失的情况的话，可以执行 `rm -rf hadoop_tmp` 和 `rm -rf logs`，hadoop_tmp为第二部分第二小节创建的目录。**
+### 多节点问题总结：
+
+1.如果遇到
+
+![](https://s3.ax1x.com/2020/11/22/DGZiDI.png) 
+
+则 修改要保存的路径`vi word_count.sh`
+
+![](https://s3.ax1x.com/2020/11/22/DGZFbt.png) 
+
+或者执行`hadoop dfs -rm -r /result` 将hadoop文件系统生成/result删除，就不会报错了
+
+2.指定map和reduce的数量
+
+输入`vi word_count.sh` 添加` -D mapred.reduce.tasks=10`指定reduce的数量，具体见[这](http://hadoop.apache.org/docs/stable1/streaming.html#Streaming+Command+Options)和[这](http://blog.itpub.net/15498/viewspace-2136139/)
+
+`vi etc/hadoop/hdfs-site.xml` 值调大就可能减小map数量，调小就可能增大map数量
+
+```
+<property> 
+	<name>dfs.block.size</name> 
+	<value>256000000</value>    
+</property>
+```
+
+但map的数量直接用这样的形式更改不一定生效，具体见[这](https://blog.csdn.net/lylcore/article/details/9136555)
+
+完整命令`hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.9.2.jar wordcount -D mapred.reduce.tasks=10 /largefile /result2 `
+
+3.如何进行自定map和reduce函数
+
+这里很详细就不再赘述，参考[这](http://hadoop.apache.org/docs/stable1/streaming.html#Streaming+Command+Options)
 
 
 
@@ -79,7 +110,7 @@ tags: [Hadoop,Java,ssh]
 2.点击键盘 `i` 或者`insert` 在末行添加下列
 
 ```
-export JAVA_HOME=/root/hadoop-2.9.2
+export JAVA_HOME=/root/jdk1.8.0_271/
 export CLASSPATH=.:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 export PATH=$PATH:$JAVA_HOME/bin
 #（！！！注意：JAVA_HOME的路径是你实际解压后的JDK的路径，千万别写错了）
@@ -161,7 +192,7 @@ export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
 
 5.输入`vi etc/hadoop/hadoop-env.sh` 修改JAVA_HOME
 
-`  export JAVA_HOME=/root/hadoop-2.9.2`  
+`  export JAVA_HOME=/root/jdk1.8.0_271/  
 
 #（！！！注意：JAVA_HOME的路径是你实际解压后的JDK的路径，千万别写错了）
 
@@ -422,18 +453,20 @@ net.ipv6.conf.lo.disable_ipv6 = 1
 
 
 
-8.修改/etc/hosts 输入`vi /etc/hosts`    添加如下 
+8.修改/etc/hosts 输入`vi /etc/hosts`    添加如下  
 
 ```
 xxxx  master # xxxx对应master的内网ip
 xxxx  slave1 # slave1的内网ip
 xxxx  slave2 # slave2的内网ip
 xxxx  slave3 # slave3的内网ip
+#！！！如果这时候slave1 slave2 slave3没有创建，则先跳过，最后多节点搭完修改
+#！！！这里有个大坑，这里的ip一定要用内网，别问为什么，并且要将原来的内网ip注释掉
 ```
 
  ![](https://s3.ax1x.com/2020/11/22/DGVICF.png) 
 
-**！！！这里有个大坑，这里的ip一定要用内网，别问为什么，并且要将原来的内网ip注释掉**
+
 
 
 
@@ -445,9 +478,13 @@ xxxx  slave3 # slave3的内网ip
 
 10.执行`rm -rf hadoop_tmp`将之前创建的namenode和datanode删除
 
+
+
 至此，master上的修改已经全部结束。接下来部署从节点的配置，下面有两种方式：
 
-第一种是将master节点保存成镜像，然后再利用此镜像创建三个slave实例（推荐此方式，操作看截图）
+
+
+- 方法一：将master节点保存成镜像，然后再利用此镜像创建三个slave实例（推荐此方式，操作看截图）
 
  ![](https://s3.ax1x.com/2020/11/22/DGVTgJ.png) 
 
@@ -455,29 +492,43 @@ xxxx  slave3 # slave3的内网ip
 
  ![](https://s3.ax1x.com/2020/11/22/DGVqD1.png) 
 
-第二种，从头分别搭建三个单节点（略过）
+
+
+- 方法二：从头分别搭建三个单节点
+
+  如果master节点和slave节点已经全部创建成功，则需要将master生成的公钥信息`~/.ssh/authorized_keys`分别复制到三个从节点的`~/.ssh/authorized_keys`
+
+  执行`scp ~/.ssh/id_rsa.pub root@slave的公网ip:~/.ssh/authorized_keys` 参考第三部分免密登录
 
 
 
-11.1如果master节点和slave节点已经全部创建成功（第一种方式创建），则在master节点依次输入
+11.多节点搭建完成后，执行
 
-`hdfs namenode -format`
+- `hdfs namenode -format`
 
-`start-dfs.sh`
+- `	start-dfs.sh`
 
-`start-yarn.sh`
+- `start-yarn.sh`
 
 
-
-11.2如果master节点和slave节点已经全部创建成功（第二种方式创建），则需要将master生成的公钥信息`~/.ssh/authorized_keys`分别复制到三个从节点的`~/.ssh/authorized_keys`
-
-执行`scp ~/.ssh/id_rsa.pub root@slave的公网ip:~/.ssh/authorized_keys` 参考第三部分免密登录
 
 
 
 12.最后在master节点和slave节点上分别输入jps，查看结果。下图为正确结果，如果缺少则配置错误
 
  ![](https://s3.ax1x.com/2020/11/22/DGV7v9.png) 
+
+
+
+13.如果有任何报错解决不了，请分别在所有节点执行以下操作
+
+- `stop-all.sh` master节点执行
+- `rm -rf ~/.ssh/known_hosts`
+
+- `rm -rf hadoop_tmp`  所有节点都要执行
+
+- `rm -rf logs` 所有节点都要执行
+- `start-all.sh` master节点执行
 
 
 
@@ -523,9 +574,9 @@ hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.9.2.jar wordcount 
 
 7.分别执行
 
-`hadoop dfs -ls /result`
+- `hadoop dfs -ls /result`
 
-`hadoop dfs -cat /result/part-r-00000`
+- `hadoop dfs -cat /result/part-r-00000`
 
  ![](https://s3.ax1x.com/2020/11/22/DGVLHx.png) 
 
@@ -549,38 +600,4 @@ hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.9.2.jar wordcount 
 
 
 
-
-
-问题：
-
-1.如果遇到
-
-![](https://s3.ax1x.com/2020/11/22/DGZiDI.png) 
-
-则 修改要保存的路径`vi word_count.sh`
-
-![](https://s3.ax1x.com/2020/11/22/DGZFbt.png) 
-
-或者执行`hadoop dfs -rm -r /result` 将hadoop文件系统生成/result删除，就不会报错了
-
-2.指定map和reduce的数量
-
-输入`vi word_count.sh` 添加` -D mapred.reduce.tasks=10`指定reduce的数量，具体见[这](http://hadoop.apache.org/docs/stable1/streaming.html#Streaming+Command+Options)和[这](http://blog.itpub.net/15498/viewspace-2136139/)
-
-`vi etc/hadoop/hdfs-site.xml` 值调大就可能减小map数量，调小就可能增大map数量
-
-```
-<property> 
-	<name>dfs.block.size</name> 
-	<value>256000000</value>    
-</property>
-```
-
-但map的数量直接用这样的形式更改不一定生效，具体见[这](https://blog.csdn.net/lylcore/article/details/9136555)
-
-完整命令`hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.9.2.jar wordcount -D mapred.reduce.tasks=10 /largefile /result2 `
-
-3.如何进行自定map和reduce函数
-
-这里很详细就不再赘述，参考[这](http://hadoop.apache.org/docs/stable1/streaming.html#Streaming+Command+Options)
 

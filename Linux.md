@@ -1,33 +1,69 @@
-#### 1.添加个人账户
+# 大杂烩笔记
 
-- cd path
-- adduser **ozh**
-  设置密码，其它选项按默认即可，账户即添加成功
-- su ozh
+<!--more-->
+
+## Linux
+
+### 1.添加个人账户
+
+- `sudo adduser tt` 
+  
+  它选项按默认即可，账户即添加成功
+  
+- `su ozh`
   输入密码后即可切换到新创建的账户
 
-#### 2.给用户添加sudo权限
+- `sudo cat /etc/passwd `
 
-​	编辑 /etc/sudoers
-​	sudo visudo，进入编辑模式，找到这一 行：“root ALL=(ALL) ALL"在起下面添加"用户名 ALL=(ALL) ALL”
-​	sudo vim /etc/sudoers 即可看到成功添加 ozh ALL=(ALL) ALL
+  最后面几行为可用账户
 
-   或者sudo usermod -a -G sudo hduser
+- `who `
 
-- sudo usermod -a -G sudo tt（新用户）
-- 修改后的结果可以查看/etc/group，可以看到sudo这一栏中包含tt
+  可查看当前登录的用户
 
-#### 3.修改密码
+- `sudo userdel tt`
 
-在超级用户权限下，输入sudo passwd ozh，然后两次输入密码，即可修改密码。
+  删除ozh用户，可能删除不完全关联的文件
 
+  `cd  /usr/sbin/ 执行 ./userdel tt`  即可删除tt用户包括关联的文件
 
 
-**压缩**tar -czvf test.tar.gz a.c   //压缩 a.c文件为test.tar.gz
 
-**解压**tar -xzvf test.tar.gz 
+### 2.给用户添加sudo权限
+
+- 方法一
+
+  `sudo vi etc/sudoers `
+
+  找到这一 行：“root ALL=(ALL) ALL"在起下面添加"tt ALL=(ALL) ALL”
+
+- 方法二
+
+  `sudo usermod -a -G sudo tt`  
+
+修改后的结果可以查看/etc/group，可以看到sudo这一栏中包含tt 
 
 
+
+### 3.修改密码
+
+- `sudo passwd tt`
+
+  修改用户tt的密码
+
+### 4.压缩解压
+
+tar命令
+
+- `tar -czvf  1.tar 1` 
+
+  压缩当前目录下1文件，压缩后的名字为1.tar
+
+  **如果压缩的文件指定目录的话，目录路径也会被压缩进去**
+
+- `tar -xzvf  1.tar`
+
+  解压1.tar压缩包
 
 **$ sudo chmod -R 777 某一目录**
 -R 是指级联应用到目录里的所有子目录和文件
@@ -176,6 +212,8 @@ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
 
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+
+conda config --show 显示默认配置
 
 conda config --set show_channel_urls yes
 
