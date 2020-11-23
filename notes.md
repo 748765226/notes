@@ -352,6 +352,8 @@ pip3 install pyqt5 -i https://pypi.tuna.tsinghua.edu.cn/simple  指定清华源
 pip3 --default-timeout=1000 install -U matplotlib 让延迟检测时间变长
 
 pip3 --default-timeout=1000  install -U pyqt5 -i   https://pypi.tuna.tsinghua.edu.cn/simple 
+
+pip install torch===1.7.0 torchvision===0.8.1 torchaudio===0.7.0 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 
 
