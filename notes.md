@@ -356,6 +356,10 @@ pip3 --default-timeout=1000  install -U pyqt5 -i   https://pypi.tuna.tsinghua.ed
 
 
 
+### [Ubuntu18.04下 sudo pip与sudo pip3 修改路径指向](https://blog.csdn.net/e_xiaoyu/article/details/102846313)
+
+
+
 ### [解决pip下载速度慢](https://blog.csdn.net/fatfatmomo/article/details/81184119)
 
 ```
