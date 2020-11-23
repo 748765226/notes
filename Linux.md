@@ -4,7 +4,11 @@
 
 ## Linux
 
-### 1.添加个人账户
+[TOC]
+
+
+
+### 添加个人账户
 
 - `sudo adduser tt` 
   
@@ -21,15 +25,14 @@
 
   可查看当前登录的用户
 
-- `sudo userdel tt`
+- `sudo userdel -r tt`
 
   删除ozh用户，可能删除不完全关联的文件
 
-  `cd  /usr/sbin/ 执行 ./userdel tt`  即可删除tt用户包括关联的文件
 
 
 
-### 2.给用户添加sudo权限
+### 给用户添加sudo权限
 
 - 方法一
 
@@ -45,15 +48,15 @@
 
 
 
-### 3.修改密码
+### 修改密码
 
 - `sudo passwd tt`
 
   修改用户tt的密码
 
-### 4.压缩解压
 
-tar命令
+
+### tar压缩解压
 
 - `tar -czvf  1.tar 1` 
 
@@ -65,108 +68,213 @@ tar命令
 
   解压1.tar压缩包
 
-**$ sudo chmod -R 777 某一目录**
+
+
+### 目录权限查看和修改
+
+```
+sudo chmod -R 777 tt
+
 -R 是指级联应用到目录里的所有子目录和文件
+
 777 是所有用户都拥有最高权限
 
- 
+权限数字对应权限组说明：
 
-Linux查看当前操作系统版本信息 cat /proc/version 
+总共分为4部分
 
-Linux查看版本当前操作系统内核信息 uname -a
+【文件或文件夹】【owner权限】【group权限】【others权限】
 
-linux查看版本当前操作系统发行信息 cat /etc/issue 或 cat /etc/centos-release
+【文件是-，文件夹是d】【r/w/x相加】【r/w/x相加】【r/w/x相加】
 
-Linux查看cpu相关信息，包括型号、主频、内核信息等 cat /etc/cpuinfo
+Linux档案的基本权限就有九个，分别是owner/group/others三种身份各有自己的read/write/execute权限。
 
-lspci   安装pciutils 
+r 读权限read 4
 
-netstat -an | grep 9000 查看9000端口是否被占用（listen占用）
+w 写权限write 2
 
-netstat -tunlp|grep 9000 查看9000端口被什么进程占用
+x 操作权限execute 1
 
-kill -9 PID 杀死占用9000端口进程的PID
+-表示相应的权限还没有被授予
+
+-rw------- (600) 只有所有者才有读和写的权限
+
+-rw-r--r-- (644) 只有所有者才有读和写的权限，组群和其他人只有读的权限
+
+-rwx------ (700) 只有所有者才有读，写，执行的权限
+
+-rwxr-xr-x (755) 只有所有者才有读，写，执行的权限，组群和其他人只有读和执行的权限
+
+-rwx--x--x (711) 只有所有者才有读，写，执行的权限，组群和其他人只有执行的权限
+
+-rw-rw-rw- (666) 每个人都有读写的权限
+
+-rwxrwxrwx (777) 每个人都有读写和执行的权限
+```
 
 
 
-**Screen**
+### 查看当前操作系统等信息
 
-screen -S xxx //创建一个screen，按住Ctrl，依次按a+d暂离会话，依次按a+c创建子会话，a+2,切换会话
+- 查看当前操作系统版本信息
 
-screen -ls //查看所有创建会话
+  `lsb_release -a`
 
-screen -r xxx //恢复会话
+  ` cat /etc/lsb-release`
+
+  `  cat /etc/issue `
+
+- 查看当前操作系统内核信息 
+
+  `uname -a`
+
+- 查看CPU信息：
+  `grep name /proc/cpuinfo`
+  `lscpu` 
+
+- 查看内存
+
+  `free -m`
+
+- 查看文件占用内存
+
+  `du -sh *`
+
+-  查看硬盘信息 
+
+  ` df -h`
+
+  ` sudo fdisk -l `
+
+- 查看pci总线
+
+  `lspci #没有的话安装pciutils` 
+
+- 查看GPU型号
+
+  `lspci | grep -i nvidia`
+
+- 查看NVIDIA驱动版本
+
+  `sudo dpkg --list | grep nvidia-*`
+
+  `cat /proc/driver/nvidia/version`
+
+
+
+### 查看进程和端口
+
+```
+端口是 Linux 系统上特定进程之间逻辑连接的标识，包括物理端口和软件端口。由于 Linux 操作系统是一个软件，因此本文只讨论软件端口。软件端口始终与主机的 IP 地址和相关的通信协议相关联，因此端口常用于区分应用程序。大部分涉及到网络的服务都必须打开一个套接字来监听传入的网络请求，而每个服务都使用一个独立的套接字。
+
+套接字是和 IP 地址、软件端口和协议结合起来使用的，而端口号对传输控制协议（TCP）和用户数据报协议（UDP）协议都适用，TCP 和 UDP 都可以使用 0 到 65535 之间的端口号进行通信。
+
+以下是端口分配类别：
+
+0 - 1023： 常用端口和系统端口
+1024 - 49151： 软件的注册端口
+49152 - 65535： 动态端口或私有端口
+
+ps -aux | grep java #查看正在运行的java进程的所有状态
+
+netstat -an | grep 9000 #查看9000端口是否被占用（listen占用）
+
+netstat -tunlp|grep 9000 #查看9000端口被什么进程占用
+
+kill -9 PID #杀死占用9000端口进程的PID -9强迫
+```
+
+
+
+### Screen
+
+```
+screen -S xxx #创建一个screen，按住Ctrl，依次按a+d暂离会话，依次按a+c创建子会话，a+2,切换会话
+
+screen -ls #查看所有创建会话
+
+screen -r xxx #恢复会话
 
 有时在恢复screen时会出现There is no screen to be resumed matching ****，screen -d xxx
 
 exit退出会话
 
 
-
-**etc/.bashrc和etc/profile 针对所有用户，home/。。针对特定用户**
-
-
-
-sudo apt-get install python3-venv
-
-python3 -m venv venv//创建
-
-source venv/bin/activate//进入环境
-
-deactivate//退出
+```
 
 
 
-mv  A/B C/D //移动A中的B文件到C目录下的D文件
+### 配置文件profile和.bashrc
+
+```
+profile 用于登录， bashrc 用于交互。 /etc/profile /etc/bash.bashrc 用于所有用户 ~/.profile ~/.bashrc 用于用户自己的配置
+
+遇见问题：linux下如何设置环境变量
+
+假如现在安装JDK，需要配置环境变量，然后执行如下命令：
+export JAVA_HOME=/xxx/xxx
+export PATH=$PATH:$JAVA_HOME/bin
+export CLASSPATH=$JAVA_HOME/lib:$JAVA_HOME/jre/lib
+
+如果想要让环境变量不是临时的，那么上面的export 命令需要写入配置文件，
+1.写入 /etc/profile
+2.或写入~/.profile
+3.或写入 ~/.bashrc
+```
 
 
-
-**容器介绍**
 
 https://www.cnblogs.com/qcloud1001/p/9273549.html
 
-https://www.cnblogs.com/bethal/p/5942369.html
+### apt包管理器
+
+- 想要安装的文件xxx的网络资源全程
+
+  `apt search xxx `
+
+- 卸载xxx
+
+  `apt remove XXX`
+
+- 查询已安装包 sudo apt remove --purge dock.io//针对性删除
+
+  `dpkg -l | grep xxx`
+
+- ifconfig找不到
+
+  `sudo apt install net-tools`
+
+- 安装fuser
+
+  `apt-get install  psmisc `
+
+### 查看防火墙状态
+
+- `sudo ufw status`
 
 
 
-apt search xxx //想要安装的文件xxx的网络资源全程
+### 关闭防火墙
+
+- `sudo ufw enable/disable`
 
 
 
-apt remove XXX//卸载xxx
+### Hostname
 
-dpkg -l | grep xxx//查询已安装包 sudo apt remove --purge dock.io//针对性删除
+- 临时修改主机名
 
+  `hostname xxx ` 
 
+-  永久修改主机名
 
-sudo apt install net-tools(ifconfig)
-
-
-
-sudo ufw status **查看防火墙状态**
-
-sudo ufw enable/disable
+  `hostnamectl set-hostname xxx`
 
 
 
-/etc/hostname  主机名
+### GIT
 
-/etc/hosts
-
-hostname xxx 临时修改主机名
-
-hostnamectl set-hostname xxx 一次性永久修改主机名
-
-
-
-df -h //查看磁盘使用情况
-
-du -sh *//查看文件占用空间大小
-
-
-
-**GIT**
-
+```
 git push origin（远程库名称）xx:xx(本地分支：远程分支) 
 
 git pull origin（远程库名称）xx:xx(远程分支：本地分支)
@@ -178,34 +286,42 @@ git clone -b xxx（分支名） xxxx（远程库地址）
 git stash 暂时丢掉
 
 git stash pop
+```
 
 
 
-**conda**
+### conda
 
-conda config --set auto_activate_base false 退出默认base
+```
+conda config --set auto_activate_base false #退出默认base
 
-conda create -n xxx python==3.x 创建环境
+conda create -n xxx python==3.x #创建环境
 
-conda env remove -n env-name 删除指定环境
+conda env remove -n env-name #删除指定环境
 
-conda env list 列出环境列表
+conda env list #列出环境列表
 
-conda install xxx 安装xx包
+conda install xxx #安装xxx包
 
-conda remove xxx 删除指定包
+conda remove xxx #删除指定包
 
-conda update package-name 更新指定包
+conda update package-name #更新指定包
 
-conda list 列出所有包
+conda list #列出所有包
 
-conda search xxx 搜索指定包
+conda search xxx #搜索指定包
 
-conda activate  xxx 进入某个环境
+conda activate  xxx #进入某个环境
 
-conda deactivate 退出
+conda deactivate #退出
+```
 
-**添加conda源**
+
+
+### 添加conda源
+
+```
+conda config --show 显示默认配置
 
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/
 
@@ -213,18 +329,36 @@ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/
 
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
 
-conda config --show 显示默认配置
-
 conda config --set show_channel_urls yes
 
+conda config --remove-key channels 还原默认源
+```
+
+
+
+### conda安装过程出现PackagesNotFoundError
+
+- `anaconda search -t conda torch`
+
+- `conda install -c https://conda.anaconda.org/  搜索结果 +空格+torch` [参考](https://blog.csdn.net/webmater2320/article/details/105230350/)
+
+
+
+### pip
+
+```
 pip3 install pyqt5 -i https://pypi.tuna.tsinghua.edu.cn/simple  指定清华源
 
 pip3 --default-timeout=1000 install -U matplotlib 让延迟检测时间变长
 
-pip3 --default-timeout=1000  install -U pyqt5 -i   https://pypi.tuna.tsinghua.edu.cn/simple http://mirrors.aliyun.com/pypi/simple/
+pip3 --default-timeout=1000  install -U pyqt5 -i   https://pypi.tuna.tsinghua.edu.cn/simple 
+```
 
-解决pip下载速度慢 https://blog.csdn.net/fatfatmomo/article/details/81184119
 
+
+### [解决pip下载速度慢](https://blog.csdn.net/fatfatmomo/article/details/81184119)
+
+```
 Linux下，修改 ~/.pip/pip.conf (没有就创建一个文件夹及文件。文件夹要加“.”，表示是隐藏文件夹)
 
 [global]
@@ -232,14 +366,14 @@ index-url = https://pypi.tuna.tsinghua.edu.cn/simple
 
 [install]
 trusted-host=mirrors.aliyun.com
+```
 
-apt-get install  psmisc #安装fuser
 
-**Tmux**
 
+### [Tmux](http://www.ruanyifeng.com/blog/2019/10/tmux.html)
+
+```
 会话 session 窗口 window 窗格 
-
-http://www.ruanyifeng.com/blog/2019/10/tmux.html
 
 tmux new -s new-session #创建新会话
 
@@ -254,9 +388,13 @@ tmux ls #显示所有会话
 tmux kill-session -t  name-session #杀死会话
 
 tmux rename -t name-session new-session-name # 重命名
+```
 
-**高级tmux**
 
+
+### 高级tmux
+
+```
 tmux split-window # 划分上下窗格
 
 tmux split -h # 划分左右窗格 
@@ -264,8 +402,11 @@ tmux split -h # 划分左右窗格
 tmux select-pane -U -D -L -R #上下左右切换鼠标光标
 
 tmux swap-pane -U -D -L -R # 上下左右切换窗格位置
+```
 
-**tmux 快捷键**
+
+
+### tmux 快捷键
 
 - `Ctrl+b d`：分离当前会话。
 - `Ctrl+b s`：列出所有会话。
@@ -282,32 +423,17 @@ tmux swap-pane -U -D -L -R # 上下左右切换窗格位置
 - `Ctrl+b ,`：窗口重命名。
 - `Ctrl+b $`：重命名当前会话。
 
-**tmux流程**
+
+
+### tmux流程
 
 tmux 新建一个会话， ctrl+b $ 重命名当前会话， ctrl+b % 左右划分 窗格 ，ctrl+b “ 上下划分窗格， ctrl+b c 新建窗口，ctrl+b ， 重命名窗口， ctrl+b d 离开当前会话，tmux ls 显示所有会话，tmux attach -t 会话名，ctrl+b x 关闭当前窗格 ctrl+b w列表选择会话、窗口、窗格。
 
-**curl待学...**
 
-**安装detectron包**
 
-pip3 install detectron2==0.1.3-f  https://dl.fbaipublicfiles.com/detectron2/wheels/cu101/torch1.5/index.html 
+### Vim高级用法
 
- 
-
-**Ubuntu16.04桌面突然卡住**
-
-(1)Ubuntu有6个tty终端，按住Ctrl+Alt+F1可以进入tty1终端，（同理Ctrl+Alt+F2，F3等可以进入其他的tty1终端，这里我们只需要进入一个tty终端就能解决问题）。
-
-(2)进入tty终端后先输入你的用户名和密码登录。
-
-(3)执行命令注销桌面重新登陆：
-
-sudo pkill Xorg
-
-https://blog.csdn.net/hautxuhaihu/article/details/78924926 
-
-**Vim高级用法**
-
+```
 1)一些常用的Vim配置，在~/.vimrc中
 
 syntax on    支持语法高亮
@@ -344,36 +470,13 @@ w(e) 移动光标到下一个单词. b 移动光标到上一个单词.
 向前向后翻页 ctrl+f 和 ctrl+b.
 % 跳转到相配对的括号.
   G(shift+g)   - go to the last line in the vim editor (文件的末尾)  1G - goto line number 1(文件的开始) 20G - goto line number 20
+```
 
 
 
-**查看GPU型号**
 
-**lspci | grep -i nvidia**
 
-**查看NVIDIA驱动版本**
-
-**sudo dpkg --list | grep nvidia-***
-
-**或者**
-
-**cat /proc/driver/nvidia/version**
-
-### **ubuntu sudo update与upgrade的作用及区别**
-
- https://blog.csdn.net/beckeyloveyou/article/details/51352426 
-
-### Ubuntu18.04下更改apt源为阿里云源
-
- https://blog.csdn.net/zhangjiahao14/article/details/80554616 
-
-### 解决ubuntu分辨率问题
-
-https://blog.csdn.net/simmonloyld/article/details/87393775
-
-### 显卡，显卡驱动,nvcc, cuda driver,cudatoolkit,cudnn
-
- https://zhuanlan.zhihu.com/p/91334380 
+### [显卡，显卡驱动,nvcc, cuda driver,cudatoolkit,cudnn]( https://zhuanlan.zhihu.com/p/91334380 )
 
 **CUDA Toolkit** 包括 **1.Compiler**: CUDA-C和CUDA-C++编译器`NVCC`  **2.Tools**: 提供一些像`profiler`,`debuggers`等工具  **3.Libraries**: 下面列出的部分科学库和实用程序库  **4.CUDA Samples**: 演示如何使用各种CUDA和library API的代码示例  **5.CUDA Driver**: 运行CUDA应用程序需要系统至少有一个**具有CUDA功能的GPU**和**与CUDA工具包兼容的驱动程序**  
 
@@ -397,8 +500,13 @@ print(torch.cuda.is_available())
 torch.cuda.get_device_name(0)
 ```
 
-### docker教程
+## docker
 
+###  [docker](https://www.cnblogs.com/qcloud1001/p/9273549.html) 教程
+
+
+
+```
 docker image ls  \# 列出本机的所有 image 文件 
 
 docker image rm [image_name] \# 删除 image文件 
@@ -461,4 +569,47 @@ docker container run命令具有自动抓取 image 文件的功能。如果发�
 下面的命令可以**清理掉所有处于终止状态的容器**。
 
 **docker container prune**
+```
+
+### 
+
+## Ubuntu 
+
+### [Ubuntu sudo update与upgrade的作用及区别](https://blog.csdn.net/beckeyloveyou/article/details/51352426 )
+
+
+
+### [Ubuntu18.04下更改apt源为阿里云源](https://blog.csdn.net/zhangjiahao14/article/details/80554616)
+
+
+
+### [解决ubuntu分辨率问题](https://blog.csdn.net/simmonloyld/article/details/87393775)
+
+
+
+### [Ubuntu16.04桌面突然卡住](https://blog.csdn.net/hautxuhaihu/article/details/78924926)
+
+```
+(1)Ubuntu有6个tty终端，按住Ctrl+Alt+F1可以进入tty1终端，（同理Ctrl+Alt+F2，F3等可以进入其他的tty1终端，这里我们只需要进入一个tty终端就能解决问题）。
+
+(2)进入tty终端后先输入你的用户名和密码登录。
+
+(3)执行命令注销桌面重新登陆：
+
+sudo pkill Xorg
+```
+
+
+
+### 安装detectron包
+
+```
+pip3 install detectron2==0.1.3-f  
+
+https://dl.fbaipublicfiles.com/detectron2/wheels/cu101/torch1.5/index.html 
+```
+
+
+
+### curl待学...
 
