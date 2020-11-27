@@ -4,8 +4,6 @@
 
 ## Linux
 
-[TOC]
-
 
 
 ### 添加个人账户
@@ -506,9 +504,13 @@ print(torch.cuda.is_available())
 torch.cuda.get_device_name(0)
 ```
 
-## docker
 
-###  [docker](https://www.cnblogs.com/qcloud1001/p/9273549.html) 教程
+
+## Docker
+
+
+
+###  [Docker](https://www.cnblogs.com/qcloud1001/p/9273549.html) 教程
 
 
 
@@ -577,9 +579,11 @@ docker container run命令具有自动抓取 image 文件的功能。如果发�
 **docker container prune**
 ```
 
-### 
+
 
 ## Ubuntu 
+
+
 
 ### [Ubuntu sudo update与upgrade的作用及区别](https://blog.csdn.net/beckeyloveyou/article/details/51352426 )
 
