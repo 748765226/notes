@@ -111,3 +111,29 @@
 
 **model.load_state_dict(torch.load(‘net_params.pkl’)) # 仅加载参数**
 
+
+
+服务器GPU状态查询
+
+  1） lspci | grep -i nvidia 可以查询所有nvidia显卡
+
+  2） lspci -v -s [显卡编号] 可以查看显卡具体属性
+
+  3） nvidia-smi 可以查看显卡的显存利用率
+
+torch.cuda主要函数
+
+  1) 查看是否有可用GPU、可用GPU数量： torch.cuda.is_available(), torch.cuda.device_count()
+
+  2) 查看当前使用的GPU序号：torch.cuda.current_device()
+
+  3) 查看指定GPU的容量、名称：
+
+​    torch.cuda.get_device_capability(device), torch.cuda.get_device_name(device)
+
+  4) 清空程序占用的GPU资源： torch.cuda.empty_cache()
+
+  5) 为GPU设置随机种子：torch.cuda.manual_seed(*seed*), torch.cuda.manual_seed_all(*seed*)
+
+
+
