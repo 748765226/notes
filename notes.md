@@ -352,6 +352,41 @@ pip3 --default-timeout=1000 install -U matplotlib 让延迟检测时间变长
 pip3 --default-timeout=1000  install -U pyqt5 -i   https://pypi.tuna.tsinghua.edu.cn/simple 
 
 pip install torch===1.7.0 torchvision===0.8.1 torchaudio===0.7.0 -f https://download.pytorch.org/whl/torch_stable.html
+
+pip show xxx 显示pip安装路径
+
+pip freeze 查看安装的包
+
+pip freeze >requirements.txt 将环境导入到requirement.txt
+
+pip install -r requirements.txt 安装导入新环境
+```
+
+
+
+### conda和pip的坑
+
+```
+1.使用conda install在虚拟环境中安装的包都存放在了/anoconda3/pkgs 这个路径下，然后，我们在我们的虚拟环境中要用到或下载时先到该路径下去找，若有则直接将其复制到我们的虚拟环境中包得存放位置：~/anoconda3/envs/xxx/lib/python3.6/site-packages/。若没有，则先下载到/anoconda3/pkgs，在复制到虚拟环境包的路径下。
+
+2.而在虚拟环境中使用pip install 安装时，则直接将包安装在了~/anoconda3/envs/xxx/lib/python3.6/site-packages/路径下。
+
+python -m site 查看当前虚拟环境的实际运行路径
+
+如果USER_BASE和USER_SITE与自己要运行的路径不匹配，则打开 ~/anaconda3/envs/XXX/lib/python3.6/site.py 进行人工设定
+
+python3 -m site
+
+sys.path = [
+    '/home/jwang/anaconda3/envs/CornerNet_Lite/lib/python3.7',
+    '/home/jwang/anaconda3/envs/CornerNet_Lite/lib/python37.zip',
+    '/home/jwang/anaconda3/envs/CornerNet_Lite/lib/python3.7/lib-dynload',
+    '/home/jwang/anaconda3/envs/CornerNet_Lite/lib/python3.7/site-packages',
+    '/home/jwang/anaconda3/envs/CornerNet_Lite/lib/python3.7/site-packages/torchvision-0.2.1-py3.7.egg',
+]
+USER_BASE: '~/anaconda3/envs/CornerNet_Lite/lib/python3.7/' (exists)
+USER_SITE: '~/anaconda3/envs/CornerNet_Lite/lib/python3.7/site-packages' (exists)
+ENABLE_USER_SITE: True
 ```
 
 
